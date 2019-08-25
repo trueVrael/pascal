@@ -1,0 +1,35 @@
+ while (czytanie <> nil) do begin
+        czytpunkt := czytanie^.stan^.nast;
+        pierwszy := true;
+        while (czytpunkt <> nil) do begin
+            if (czytpunkt^.komorka.w = 3) or
+               (czytpunkt^.komorka.w = 4) or
+               (czytpunkt^.komorka.w =-3) then begin
+                if pierwszy then begin
+                    pierwszy := false;
+                    k2 := wynik;
+                    while (k2^.nr<czytanie^.nr) and (k2^.nast<>nil) do k2:=k2^.nast;
+                    if k2^.nr <> czytanie^.nr then begin
+                        nowy_wiersz(k2^.nr,czytanie^.poprz,pom);
+                        k2 := czytanie^.poprz;
+                        k2^.nr := czytanie^.nr;
+                    end;
+                    if (k2^.poprz^.nr <> k2^.nr-1) then begin
+                        nowy_wiersz(k2^.nr-1,k2^.poprz,pom);
+                        k2^.poprz^.nr := k2^.nr-1;
+                    end;
+                    k1 := k2^.poprz;
+                    if (k2^.nast^.nr <> k2^.nr+1) or (k2^.nast=nil) then begin
+                        nowy_wiersz(k2^.nr+1,k2,pom);
+                        k2^.nast^.nr:=k2^.nr+1;
+                    end;
+                    k3:=k2^.nast;
+                end;
+                przetworz_wiersz (k1,czytpunkt^.komorka.x,k1^.stan,false);
+                przetworz_wiersz (k2,czytpunkt^.komorka.x,k2^.stan,true);
+                przetworz_wiersz (k3,czytpunkt^.komorka.x,k3^.stan,false);
+            end;
+            czytpunkt:=czytpunkt^.nast;
+        end;
+        czytanie:=czytanie^.nast;
+    end;
